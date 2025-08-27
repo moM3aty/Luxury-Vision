@@ -1,0 +1,87 @@
+﻿@using LuxuryVision.ViewModels
+@model ShopViewModel
+@{
+    ViewData["Title"] = "المتجر";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="page-header">
+    <div class="container">
+        <h1>المتجر</h1>
+        <p>تصفح جميع منتجاتنا واختر ما يناسب ذوقك الرفيع</p>
+    </div>
+</section>
+
+<section class="section-padding">
+    <div class="container">
+        <div class="shop-layout">
+            <aside class="shop-filters">
+                <form asp-action="Shop" method="get">
+                    <input type="hidden" name="searchString" value="@Model.SearchString" />
+
+                    <h4>الأقسام</h4>
+                    <ul class="category-list">
+                        <li><a href="@Url.Action("Shop", new { searchString = Model.SearchString })" class="@(Model.CategoryId == null ? "active" : "")">الكل</a></li>
+                        @foreach (var category in Model.Categories)
+                        {
+                            <li><a href="@Url.Action("Shop", new { categoryId = category.Id, searchString = Model.SearchString })" class="@(Model.CategoryId == category.Id ? "active" : "")">@category.Name (@category.Products.Count)</a></li>
+                        }
+                    </ul>
+
+                    <h4>السعر</h4>
+                    <div class="price-filter">
+                        <input type="range" min="100" max="10000" value="@(Model.MaxPrice ?? 10000)" class="price-slider" id="priceSlider">
+                        <div class="price-values">
+                            <span id="minPriceLabel">100 ريال</span>
+                            <span id="maxPriceLabel">@(Model.MaxPrice?.ToString("N0") ?? "10,000") ريال</span>
+                        </div>
+                        <input type="hidden" name="minPrice" id="minPrice" value="100" />
+                        <input type="hidden" name="maxPrice" id="maxPrice" value="@(Model.MaxPrice ?? 10000)" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary full-width">تطبيق الفلتر</button>
+                </form>
+            </aside>
+
+            <div class="shop-products">
+                @if (!string.IsNullOrEmpty(Model.SearchString))
+                {
+                    <div class="search-results-header">
+                        <h3>نتائج البحث عن: "@Model.SearchString"</h3>
+                        <span>(@Model.Products.Count()) منتجات</span>
+                    </div>
+                }
+                <div class="products-grid">
+                    @foreach (var product in Model.Products)
+                    {
+                        <a asp-controller="Home" asp-action="ProductDetails" asp-route-id="@product.Id" class="product-card">
+                            <div class="product-image">
+                                <img src="@(product.ImageUrl ?? "/images/placeholder.png")" alt="@product.Name">
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-name">@product.Name</h3>
+                                <p class="product-price">@product.Price.ToString("N0") ريال</p>
+                            </div>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const priceSlider = document.getElementById('priceSlider');
+            const maxPriceLabel = document.getElementById('maxPriceLabel');
+            const maxPriceInput = document.getElementById('maxPrice');
+
+            priceSlider.addEventListener('input', function() {
+                const value = parseInt(this.value).toLocaleString('ar-SA');
+                maxPriceLabel.textContent = value + ' ريال';
+                maxPriceInput.value = this.value;
+            });
+        });
+    </script>
+}

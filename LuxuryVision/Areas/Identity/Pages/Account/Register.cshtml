@@ -1,0 +1,48 @@
+﻿@page
+@model LuxuryVision.Areas.Identity.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "إنشاء حساب جديد";
+    Layout = "~/Areas/Identity/Pages/_Layout.cshtml";
+}
+
+<div class="login-container">
+    <div class="login-form-wrapper">
+        <div class="login-header">
+            <a asp-controller="Home" asp-action="Index">
+                <img src="~/images/logo.png" alt="Luxury Vision Logo" class="login-logo">
+            </a>
+            <h2>إنشاء حساب جديد</h2>
+            <p>انضم إلينا لتجربة تسوق فريدة</p>
+        </div>
+
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="form-group">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Password"></label>
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="••••••••" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.ConfirmPassword"></label>
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="••••••••" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <button id="registerSubmit" type="submit" class="btn btn-primary btn-block">إنشاء الحساب</button>
+        </form>
+        <p class="mt-3 text-center">
+            لديك حساب بالفعل؟ <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">سجل الدخول</a>
+        </p>
+    </div>
+    <div class="login-image-wrapper">
+        <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=2070&auto=format&fit=crop" alt="Modern Interior">
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,85 @@
+﻿@model LuxuryVision.Models.Order
+@{
+    ViewData["Title"] = "تفاصيل الطلب رقم " + Model.Id;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="order-details-grid">
+    <!-- Customer Details Card -->
+    <div class="card">
+        <div class="card-header">
+            <h3>تفاصيل العميل</h3>
+        </div>
+        <div class="card-body">
+            <ul class="details-list-vertical">
+                <li><strong>الاسم:</strong> <span>@Model.FirstName @Model.LastName</span></li>
+                <li><strong>البريد الإلكتروني:</strong> <span>@Model.Email</span></li>
+                <li><strong>رقم الجوال:</strong> <span>@Model.PhoneNumber</span></li>
+                <li><strong>المدينة:</strong> <span>@Model.City</span></li>
+                <li><strong>العنوان:</strong> <span>@Model.Address</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Order Summary Card -->
+    <div class="card">
+        <div class="card-header">
+            <h3>ملخص الطلب</h3>
+        </div>
+        <div class="card-body">
+            <ul class="details-list-vertical">
+                <li><strong>رقم الطلب:</strong> <span>#@Model.Id</span></li>
+                <li><strong>تاريخ الطلب:</strong> <span>@Model.OrderDate.ToString("dd MMMM, yyyy - hh:mm tt")</span></li>
+                <li><strong>الحالة الحالية:</strong> <span class="badge badge-warning">@Model.OrderStatus</span></li>
+                <li><strong>المبلغ الإجمالي:</strong> <span style="font-weight: bold; color: #10b981;">@Model.TotalAmount.ToString("N2") ريال</span></li>
+            </ul>
+            <form asp-action="UpdateOrderStatus" method="post" class="form-actions">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="orderId" value="@Model.Id" />
+                <select name="status" class="form-control" style="width: 60%;">
+                    <option>تغيير حالة الطلب...</option>
+                    <option value="قيد المراجعة">قيد المراجعة</option>
+                    <option value="تم الشحن">تم الشحن</option>
+                    <option value="مكتمل">مكتمل</option>
+                    <option value="ملغي">ملغي</option>
+                </select>
+                <button type="submit" class="btn btn-primary">تحديث</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Items in Order Card -->
+<div class="card">
+    <div class="card-header">
+        <h3>المنتجات في الطلب (@Model.OrderDetails.Count())</h3>
+    </div>
+    <div class="card-body">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>المنتج</th>
+                    <th>السعر عند الشراء</th>
+                    <th>الكمية</th>
+                    <th>الإجمالي الفرعي</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OrderDetails)
+                {
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <img src="@item.Product.ImageUrl" alt="@item.Product.Name" class="table-img-sm" />
+                                <span>@item.Product.Name</span>
+                            </div>
+                        </td>
+                        <td data-label="السعر">@item.UnitPrice.ToString("N2") ريال</td>
+                        <td data-label="الكمية">@item.Quantity</td>
+                        <td data-label="الإجمالي الفرعي">@((item.Quantity * item.UnitPrice).ToString("N2")) ريال</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

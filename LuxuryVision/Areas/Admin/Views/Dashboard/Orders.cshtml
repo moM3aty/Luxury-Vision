@@ -1,0 +1,44 @@
+﻿@model IEnumerable<LuxuryVision.Models.Order>
+@{
+    ViewData["Title"] = "إدارة الطلبات";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3>قائمة الطلبات (@Model.Count())</h3>
+    </div>
+    <div class="card-body">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>رقم الطلب</th>
+                    <th>اسم العميل</th>
+                    <th>تاريخ الطلب</th>
+                    <th>الإجمالي</th>
+                    <th>الحالة</th>
+                    <th>إجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td data-label="رقم الطلب">#@item.Id</td>
+                        <td data-label="اسم العميل">@item.FirstName @item.LastName</td>
+                        <td data-label="تاريخ الطلب">@item.OrderDate.ToString("yyyy/MM/dd")</td>
+                        <td data-label="الإجمالي">@item.TotalAmount.ToString("N2") ريال</td>
+                        <td data-label="الحالة">
+                            <span class="badge badge-warning">@item.OrderStatus</span>
+                        </td>
+                        <td data-label="إجراءات">
+                            <a asp-action="OrderDetails" asp-route-id="@item.Id" class="btn-action btn-view" title="عرض التفاصيل">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

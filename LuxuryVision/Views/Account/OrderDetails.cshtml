@@ -1,0 +1,56 @@
+﻿@model Order
+@{
+    ViewData["Title"] = "تفاصيل الطلب #" + Model.Id;
+}
+
+<section class="section-padding">
+    <div class="container">
+        <div class="page-header">
+            <h1>تفاصيل الطلب <span class="text-primary">#@Model.Id</span></h1>
+            <p>تم الطلب في: @Model.OrderDate.ToString("dd MMMM, yyyy")</p>
+        </div>
+
+        <div class="order-details-user-layout">
+            <div class="order-summary-card">
+                <h4>ملخص الطلب</h4>
+                <ul class="summary-list">
+                    <li><span>المجموع الفرعي</span> <span>@Model.Subtotal.ToString("N2") ريال</span></li>
+                    <li><span>تكلفة الشحن (@Model.ShippingZone.ZoneName)</span> <span>@Model.ShippingCost.ToString("N2") ريال</span></li>
+                    <li class="total"><span>الإجمالي</span> <span>@Model.TotalAmount.ToString("N2") ريال</span></li>
+                    <li><span>طريقة الدفع</span> <span>@Model.PaymentMethod</span></li>
+                    <li><span>حالة الطلب</span> <span class="badge badge-status">@Model.OrderStatus</span></li>
+                </ul>
+            </div>
+            <div class="order-address-card">
+                <h4>عنوان الشحن</h4>
+                <p>
+                    @Model.FirstName @Model.LastName<br>
+                    @Model.Address<br>
+                    @Model.City<br>
+                    @Model.PhoneNumber<br>
+                    @Model.Email
+                </p>
+            </div>
+        </div>
+
+        <div class="order-items-card">
+            <h4>المنتجات في الطلب</h4>
+            <table class="cart-items">
+                <tbody>
+                    @foreach (var item in Model.OrderDetails)
+                    {
+                        <tr>
+                            <td class="product-image-cell"><img src="@item.Product.ImageUrl" alt="@item.Product.Name"></td>
+                            <td class="product-name-cell" data-label="المنتج">
+                                <a asp-controller="Home" asp-action="ProductDetails" asp-route-id="@item.ProductId">@item.Product.Name</a>
+                            </td>
+                            <td data-label="السعر">@item.UnitPrice.ToString("N2") ريال</td>
+                            <td data-label="الكمية">@item.Quantity</td>
+                            <td data-label="الإجمالي">@((item.Quantity * item.UnitPrice).ToString("N2")) ريال</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,44 @@
+﻿@* FILE: /Areas/Admin/Views/Dashboard/CategoryForm.cshtml *@
+@model LuxuryVision.ViewModels.CategoryFormViewModel
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card" style="max-width: 700px; margin: auto;">
+    <div class="card-header">
+        <h3>@ViewData["Title"]</h3>
+    </div>
+    <div class="card-body">
+        <form asp-action="CategoryForm" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Category.Id" />
+            <input type="hidden" asp-for="Category.ImageUrl" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Category.Name">اسم القسم</label>
+                <input asp-for="Category.Name" class="form-control" />
+                <span asp-validation-for="Category.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ImageFile">صورة القسم</label>
+                <input asp-for="ImageFile" class="form-control" type="file" accept="image/*" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Category.ImageUrl))
+            {
+                <div class="form-group">
+                    <label>الصورة الحالية</label>
+                    <img src="@Model.Category.ImageUrl" alt="الصورة الحالية" class="table-img" style="height: 100px; width: 100px; object-fit: contain;" />
+                </div>
+            }
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> حفظ</button>
+                <a asp-action="Categories" class="btn btn-secondary">إلغاء</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Order>
+@{
+    ViewData["Title"] = "طلباتي";
+}
+
+<section class="section-padding">
+    <div class="container">
+        <div class="page-header">
+            <h1>طلباتي</h1>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="text-center">
+                <p>لم تقم بأي طلبات بعد.</p>
+                <a asp-controller="Home" asp-action="Shop" class="btn btn-primary">اذهب للتسوق</a>
+            </div>
+        }
+        else
+        {
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>رقم الطلب</th>
+                        <th>التاريخ</th>
+                        <th>الإجمالي</th>
+                        <th>الحالة</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td data-label="رقم الطلب">#@order.Id</td>
+                            <td data-label="التاريخ">@order.OrderDate.ToString("yyyy/MM/dd")</td>
+                            <td data-label="الإجمالي">@order.TotalAmount.ToString("N2") ريال</td>
+                            <td data-label="الحالة"><span class="badge badge-status">@order.OrderStatus</span></td>
+                            <td><a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-outline">عرض التفاصيل</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</section>

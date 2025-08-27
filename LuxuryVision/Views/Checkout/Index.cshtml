@@ -1,0 +1,117 @@
+﻿@model LuxuryVision.ViewModels.CheckoutViewModel
+@{
+    ViewData["Title"] = "إتمام الدفع";
+}
+
+<section class="section-padding">
+    <div class="container">
+        <div class="page-header">
+            <h1>إتمام الدفع</h1>
+        </div>
+        <form asp-action="PlaceOrder" method="post" id="checkoutForm">
+            @Html.AntiForgeryToken()
+            @* FIXED: Changed validation summary to "All" to show all error messages *@
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="checkout-layout">
+                <div class="billing-details">
+                    <h3>تفاصيل الفاتورة والشحن</h3>
+                    <div class="checkout-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label asp-for="Order.FirstName">الاسم الأول</label>
+                                <input asp-for="Order.FirstName" class="form-control" />
+                                <span asp-validation-for="Order.FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Order.LastName">الاسم الأخير</label>
+                                <input asp-for="Order.LastName" class="form-control" />
+                                <span asp-validation-for="Order.LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Order.Address">العنوان</label>
+                            <input asp-for="Order.Address" class="form-control" placeholder="اسم الشارع، رقم المبنى" />
+                            <span asp-validation-for="Order.Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Order.City">المدينة</label>
+                            <input asp-for="Order.City" class="form-control" />
+                            <span asp-validation-for="Order.City" class="text-danger"></span>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label asp-for="Order.PhoneNumber">رقم الجوال</label>
+                                <input asp-for="Order.PhoneNumber" class="form-control" />
+                                <span asp-validation-for="Order.PhoneNumber" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Order.Email">البريد الإلكتروني</label>
+                                <input asp-for="Order.Email" class="form-control" />
+                                <span asp-validation-for="Order.Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Order.ShippingZoneId"></label>
+                            <select asp-for="Order.ShippingZoneId" class="form-control" asp-items="@(new SelectList(Model.ShippingZones, "Id", "ZoneName"))" id="shippingZoneSelector">
+                                <option value="">اختر منطقة الشحن...</option>
+                            </select>
+                            <span asp-validation-for="Order.ShippingZoneId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-summary-checkout">
+                    <h4>طلبك</h4>
+                    <div class="summary-product-list">
+                        @foreach (var item in Model.CartItems)
+                        {
+                            <div class="summary-product">
+                                <span>@item.ProductName × @item.Quantity</span>
+                                <span>@item.Total.ToString("N2") ريال</span>
+                            </div>
+                        }
+                    </div>
+                    <div class="summary-row">
+                        <span>المجموع الفرعي</span>
+                        <span id="subtotal">@Model.ItemsTotal.ToString("N2") ريال</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>الشحن</span>
+                        <span id="shippingCost">0.00 ريال</span>
+                    </div>
+                    <div class="summary-row total-row">
+                        <span>الإجمالي</span>
+                        <span id="grandTotal">@Model.ItemsTotal.ToString("N2") ريال</span>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">الانتقال إلى الدفع</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const shippingSelector = document.getElementById('shippingZoneSelector');
+            const shippingCostEl = document.getElementById('shippingCost');
+            const grandTotalEl = document.getElementById('grandTotal');
+            const subtotal = parseFloat('@Model.ItemsTotal');
+            const shippingZones = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ShippingZones.ToDictionary(z => z.Id, z => z.ShippingCost)));
+
+            shippingSelector.addEventListener('change', function () {
+                const selectedZoneId = this.value;
+                if (selectedZoneId && shippingZones[selectedZoneId] !== undefined) {
+                    const cost = parseFloat(shippingZones[selectedZoneId]);
+                    shippingCostEl.textContent = cost.toFixed(2) + ' ريال';
+                    grandTotalEl.textContent = (subtotal + cost).toFixed(2) + ' ريال';
+                } else {
+                    shippingCostEl.textContent = '0.00 ريال';
+                    grandTotalEl.textContent = subtotal.toFixed(2) + ' ريال';
+                }
+            });
+        });
+    </script>
+}

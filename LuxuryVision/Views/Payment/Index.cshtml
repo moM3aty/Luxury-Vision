@@ -1,0 +1,59 @@
+﻿@model Order
+@{
+    ViewData["Title"] = "اختر طريقة الدفع";
+}
+
+<section class="section-padding">
+    <div class="container">
+        <div class="page-header">
+            <h1>اختر طريقة الدفع</h1>
+            <p>الخطوة الأخيرة لإتمام طلبك</p>
+        </div>
+
+        <div class="payment-selection-layout">
+            <div class="order-summary-payment">
+                <h4>ملخص الطلب</h4>
+                <div class="summary-row">
+                    <span>المجموع الفرعي</span>
+                    <span>@Model.Subtotal.ToString("N2") ريال</span>
+                </div>
+                <div class="summary-row">
+                    <span>الشحن</span>
+                    <span>@Model.ShippingCost.ToString("N2") ريال</span>
+                </div>
+                <div class="summary-row total-row">
+                    <span>الإجمالي للدفع</span>
+                    <span>@Model.TotalAmount.ToString("N2") ريال</span>
+                </div>
+            </div>
+
+            <div class="payment-options">
+                <h3>طرق الدفع المتاحة</h3>
+                <form asp-action="ProcessPayment" method="post">
+                    <div class="payment-option-card">
+                        <input type="radio" id="moyasar" name="paymentMethod" value="Moyasar" checked>
+                        <label for="moyasar">
+                            <img src="https://placehold.co/80x40/c5a47e/FFFFFF?text=Moyasar" alt="Moyasar">
+                            <span>الدفع عبر ميسر (بطاقات مدى، فيزا، ماستركارد)</span>
+                        </label>
+                    </div>
+                    <div class="payment-option-card">
+                        <input type="radio" id="saree" name="paymentMethod" value="Saree">
+                        <label for="saree">
+                            <img src="https://placehold.co/80x40/3a3a3a/FFFFFF?text=Saree" alt="Saree">
+                            <span>الدفع عبر سريع (Apple Pay)</span>
+                        </label>
+                    </div>
+                    <div class="payment-option-card">
+                        <input type="radio" id="qr" name="paymentMethod" value="QRCode">
+                        <label for="qr">
+                            <img src="https://placehold.co/80x40/000000/FFFFFF?text=QR" alt="QR Code">
+                            <span>الدفع عبر QR Code (محفظة إلكترونية)</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">تأكيد ومتابعة للدفع</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

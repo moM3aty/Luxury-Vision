@@ -1,0 +1,154 @@
+﻿@using LuxuryVision.ViewModels
+@model HomeViewModel
+@{
+    ViewData["Title"] = "الرئيسية";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section id="hero" class="section-padding">
+    <div class="container">
+        <div class="hero-grid">
+            <div class="hero-content">
+                <h1>أثاث فاخر</h1>
+                <p class="subtitle">أثاث أنيق وعملي لمنزلك</p>
+                <a asp-controller="Home" asp-action="Shop" class="btn btn-primary">تسوق الآن</a>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=2070&auto=format&fit=crop" alt="Elegant living room sofa">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about" class="section-padding animate-on-scroll">
+    <div class="container">
+        <div class="about-grid">
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop"
+                     alt="صورة تعبر عن صناعة الأثاث">
+            </div>
+            <div class="about-content">
+                <h2 class="section-title-left">قصتنا في عالم الفخامة</h2>
+                <p>في "رؤية الفخامة"، نحن نؤمن بأن الأثاث ليس مجرد قطع تملأ المساحات، بل هو انعكاس للذوق الشخصي وروح المكان. منذ بدايتنا، وضعنا الجودة والحرفية العالية في صميم عملنا، لنصنع قطعًا فريدة تدوم.</p>
+                <ul class="features-list">
+                    <li><i class="fas fa-check-circle"></i> <strong>جودة استثنائية:</strong> نستخدم أجود أنواع الأخشاب والمواد لنضمن المتانة والجمال.</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>تصميم حسب الطلب:</strong> نحول أفكارك إلى واقع ملموس يناسب مساحتك تمامًا.</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>دقة في التفاصيل:</strong> كل قطعة نصنعها هي تحفة فنية نهتم بأدق تفاصيلها.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="how-it-works" class="section-padding animate-on-scroll" style="background-color: var(--surface-color);">
+    <div class="container">
+        <div class="section-title">
+            <h2>تصميم حسب الطلب؟ خطوات بسيطة لتحقيق حلمك</h2>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <i class="fas fa-comments step-icon"></i>
+                <h3>الاستشارة الأولية</h3>
+                <p>تواصل معنا لمناقشة فكرتك، متطلباتك، والميزانية المتاحة.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <i class="fas fa-ruler-combined step-icon"></i>
+                <h3>القياس والتصميم</h3>
+                <p>يقوم فريقنا بزيارتك لأخذ المقاسات الدقيقة وإعداد تصورات أولية للتصميم.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <i class="fas fa-hammer step-icon"></i>
+                <h3>التصنيع بحرفية</h3>
+                <p>نبدأ في تصنيع قطعتك بأجود المواد وبأيدي أمهر الحرفيين.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <i class="fas fa-truck-loading step-icon"></i>
+                <h3>التوصيل والتركيب</h3>
+                <p>نسلمك القطعة النهائية ونقوم بتركيبها في مكانها لنضمن رضاك التام.</p>
+            </div>
+        </div>
+        <div class="text-center" style="margin-top: 3rem;">
+            <a href="https://wa.me/966000000000" target="_blank" class="btn btn-primary btn-lg">اطلب استشارة مجانية الآن</a>
+        </div>
+    </div>
+</section>
+
+<section id="catalog" class="section-padding animate-on-scroll">
+    <div class="container">
+        <div class="section-title">
+            <h2>تصفح أقسامنا</h2>
+        </div>
+        <div class="catalog-grid">
+            @foreach (var category in Model.Categories)
+            {
+                <a asp-controller="Home" asp-action="Shop" asp-route-categoryId="@category.Id" class="category-card">
+                    <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1932&auto=format&fit=crop" alt="@category.Name">
+                    <h3>@category.Name</h3>
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+
+<section id="products" class="section-padding animate-on-scroll">
+    <div class="container">
+        <div class="section-title">
+            <h2>منتجات مميزة</h2>
+        </div>
+        <div class="products-grid">
+            @foreach (var product in Model.FeaturedProducts)
+            {
+                <a asp-controller="Home" asp-action="ProductDetails" asp-route-id="@product.Id" class="product-card">
+                    <div class="product-image">
+                        <img src="@product.ImageUrl" alt="@product.Name">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">@product.Name</h3>
+                        <p class="product-price">@product.Price.ToString("N0") ريال</p>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="section-padding">
+    <div class="container">
+        <div class="page-header">
+            <h1>تواصل معنا</h1>
+            <p>نسعد باستقبال استفساراتكم ومقترحاتكم في أي وقت</p>
+        </div>
+        <div class="contact-card">
+            <div class="contact-info-top">
+                <div class="info-block">
+                    <div class="icon-circle"><i class="fas fa-map-marker-alt"></i></div>
+                    <h4>العنوان</h4>
+                    <p>الرياض، المملكة العربية السعودية</p>
+                </div>
+                <div class="info-block">
+                    <div class="icon-circle"><i class="fab fa-facebook-f"></i></div>
+                    <h4>فيسبوك</h4>
+                    <p>LuxuryVisionSA</p>
+                </div>
+                <div class="info-block">
+                    <div class="icon-circle"><i class="fab fa-instagram"></i></div>
+                    <h4>انستغرام</h4>
+                    <p>LuxuryVisionSA</p>
+                </div>
+            </div>
+            <form class="contact-form">
+                <div class="form-row">
+                    <input type="text" placeholder="الاسم" required>
+                    <input type="email" placeholder="البريد الإلكتروني" required>
+                </div>
+                <textarea placeholder="رسالتك..." rows="6" required></textarea>
+                <button type="submit" class="btn btn-primary">أرسل الآن</button>
+            </form>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,46 @@
+﻿@model Order
+@{
+    ViewData["Title"] = "تم استلام طلبك";
+}
+
+<section class="section-padding">
+    <div class="container text-center">
+
+        @if (Model.OrderStatus == "بانتظار الدفع")
+        {
+            <div class="page-header">
+                <i class="fas fa-hourglass-half" style="font-size: 4rem; color: #dd6b20;"></i>
+                <h1 class="mt-3">تم استلام طلبك وهو بانتظار الدفع</h1>
+                <p>
+                    رقم طلبك هو: <strong>#@Model.Id</strong>.
+                    <br>
+                    الرجاء إتمام عملية الدفع خلال 24 ساعة وإلا سيتم إلغاء الطلب تلقائياً.
+                </p>
+
+                @if (Model.PaymentMethod == "QRCode" || Model.PaymentMethod == "Saree")
+                {
+                    <div class="qr-code-container">
+                        <h4>امسح الـ QR Code لإتمام الدفع</h4>
+                        <img src="[https://placehold.co/250x250/3a3a3a/FFFFFF?text=Scan+Me](https://placehold.co/250x250/3a3a3a/FFFFFF?text=Scan+Me)" alt="QR Code for Payment">
+                    </div>
+                }
+
+                <a asp-controller="Home" asp-action="Shop" class="btn btn-primary mt-3">العودة للمتجر</a>
+            </div>
+        }
+        else
+        {
+            <div class="page-header">
+                <i class="fas fa-check-circle" style="font-size: 4rem; color: #38a169;"></i>
+                <h1 class="mt-3">شكراً لك! تم استلام طلبك بنجاح.</h1>
+                <p>
+                    رقم طلبك هو: <strong>#@Model.Id</strong>.
+                    <br>
+                    سنتواصل معك قريباً لتأكيد تفاصيل الشحن.
+                </p>
+                <a asp-controller="Home" asp-action="Shop" class="btn btn-primary mt-3">العودة للمتجر</a>
+            </div>
+        }
+
+    </div>
+</section>

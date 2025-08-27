@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Luxury Vision</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link href="~/images/logo.png" rel="icon" />
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <a class="logo" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logo.png" alt="Luxury Vision Logo">
+                </a>
+                <ul class="nav-links">
+                    <li><a asp-controller="Home" asp-action="Index" class="active">الرئيسية</a></li>
+                    <li><a href="/#about">عن الشركه</a></li>
+                    <li><a href="/#catalog">الأقسام</a></li>
+                    <li><a asp-controller="Home" asp-action="Shop">المنتجات</a></li>
+                    <li><a href="/#contact">تواصل معنا</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <form asp-controller="Home" asp-action="Shop" method="get" class="search-form">
+                        <input type="text" name="searchString" placeholder="ابحث عن منتج..." value="@ViewData["CurrentFilter"]">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+
+                    @await Component.InvokeAsync("ShoppingCart")
+
+                    <partial name="_LoginPartial" />
+                    <div class="menu-icon"><i class="fas fa-bars"></i></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a asp-controller="Home" asp-action="Index" class="footer-logo-link">
+                        <img src="~/images/logo.png" alt="Luxury Vision Logo" class="footer-logo">
+                    </a>
+                    <p class="footer-about">نصنع الأثاث بشغف، ونقدم حلولًا مبتكرة تلبي تطلعاتكم وتناسب مساحاتكم. رؤية الفخامة، حيث يلتقي الفن بالجودة.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>روابط سريعة</h4>
+                    <ul>
+                        <li><a href="/#hero">الرئيسية</a></li>
+                        <li><a href="/#about">عن الشركه</a></li>
+                        <li><a href="/#catalog">الأقسام</a></li>
+                        <li><a asp-controller="Home" asp-action="Shop">المنتجات</a></li>
+                        <li><a href="/#contact">تواصل معنا</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>تواصل معنا</h4>
+                    <ul class="footer-contact-list">
+                        <li><i class="fas fa-map-marker-alt"></i><span>الرياض، المملكة العربية السعودية</span></li>
+                        <li><i class="fas fa-phone-alt"></i><span>+966 11 234 5678</span></li>
+                        <li><i class="fas fa-envelope"></i><span>info@luxuryvision.sa</span></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>تابعنا</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/966000000000" target="_blank" aria-label="Whatsapp"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>جميع الحقوق محفوظة &copy; @DateTime.Now.Year لـ رؤية الفخامة</p>
+                <div class="credits">
+                    تصميم وبرمجة
+                    <a href="https://www.facebook.com/share/19mzVi748h/" target="_blank">GMTWeb</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/js/main.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

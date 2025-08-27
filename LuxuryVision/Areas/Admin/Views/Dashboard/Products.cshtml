@@ -1,0 +1,94 @@
+﻿@model IEnumerable<LuxuryVision.Models.Product>
+@{
+    ViewData["Title"] = "إدارة المنتجات";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3>قائمة المنتجات (@Model.Count())</h3>
+        <a asp-action="ProductForm" class="btn btn-primary">
+            <i class="fas fa-plus"></i> إضافة منتج جديد
+        </a>
+    </div>
+    <div class="card-body">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>الصورة</th>
+                    <th>اسم المنتج</th>
+                    <th>القسم</th>
+                    <th>السعر</th>
+                    <th>مميز؟</th>
+                    <th>إجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><img src="@item.ImageUrl" alt="@item.Name" class="table-img" /></td>
+                        <td data-label="اسم المنتج">@item.Name</td>
+                        <td data-label="القسم">@item.Category.Name</td>
+                        <td data-label="السعر">@item.Price.ToString("N0") ريال</td>
+                        <td data-label="مميز؟">
+                            @if (item.IsFeatured)
+                            {
+                                <span class="badge badge-success">نعم</span>
+                            }
+                            else
+                            {
+
+                                <span class="badge badge-secondary">لا</span>
+                            }
+                        </td>
+                        <td data-label="إجراءات">
+                            <a asp-action="ProductForm" asp-route-id="@item.Id" class="btn-action btn-edit"><i class="fas fa-pencil-alt"></i></a>
+                            <button type="button" class="btn-action btn-delete" onclick="confirmDelete(@item.Id, '@item.Name')">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>تأكيد الحذف</h4>
+            <button type="button" class="close-button" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>هل أنت متأكد من أنك تريد حذف المنتج "<strong id="productName"></strong>"؟</p>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeModal()">إلغاء</button>
+            <form asp-action="DeleteProduct" method="post" id="deleteForm" style="display: contents;">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="productIdToDelete" name="id" value="" />
+                <button type="submit" class="btn btn-danger">نعم، قم بالحذف</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var modal = document.getElementById('deleteModal');
+        function confirmDelete(id, name) {
+            document.getElementById('productName').innerText = name;
+            document.getElementById('productIdToDelete').value = id;
+            modal.style.display = "block";
+        }
+        function closeModal() {
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+}

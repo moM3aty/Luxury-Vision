@@ -1,0 +1,73 @@
+﻿@model LuxuryVision.Models.Product
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container">
+    <section class="section-padding">
+        <div class="breadcrumbs">
+            <a asp-controller="Home" asp-action="Index">الرئيسية</a> /
+            <a asp-controller="Home" asp-action="Shop">المتجر</a> /
+            <span>@Model.Name</span>
+        </div>
+
+        <div class="product-card-main">
+            <div class="product-image-col">
+                <img src="@(Model.ImageUrl ?? "/images/placeholder.png")" alt="@Model.Name">
+            </div>
+
+            <div class="product-info-col">
+                <h1>@Model.Name</h1>
+
+                <div class="info-group">
+                    <span class="info-label">وصف المنتج:</span>
+                    <p class="info-text">@Model.Description</p>
+                </div>
+
+                <div class="info-group">
+                    <span class="info-label">القسم:</span>
+                    <span class="info-value">@Model.Category.Name</span>
+                </div>
+
+                <div class="info-group">
+                    <span class="info-label">الخامة:</span>
+                    <span class="info-value">@Model.Material</span>
+                </div>
+
+                <div class="info-group price-group">
+                    <span class="info-label">السعر:</span>
+                    <div>
+                        <span class="info-price">@Model.Price.ToString("N2") ريال</span>
+                        @if (Model.OldPrice.HasValue)
+                        {
+                            <span class="old-price">@Model.OldPrice.Value.ToString("N2") ريال</span>
+                        }
+                    </div>
+                </div>
+
+                <!-- Add to Cart Form -->
+                <form asp-controller="Cart" asp-action="Add" method="post" class="add-to-cart-form">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <div class="quantity-control">
+                        <label class="info-label">الكمية:</label>
+                        <div class="quantity-wrapper">
+                            <button type="button" class="quantity-btn" data-action="decrement">-</button>
+                            <input type="number" name="quantity" value="1" min="1" class="quantity-input" readonly>
+                            <button type="button" class="quantity-btn" data-action="increment">+</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-add-to-cart"><i class="fas fa-shopping-cart"></i> أضف إلى السلة</button>
+                </form>
+            </div>
+        </div>
+        <div class="details-card">
+            <h2>التفاصيل التقنية</h2>
+            <ul class="details-list">
+                <li><span class="detail-key">أبعاد المنتج</span><span class="detail-value">@Model.Dimensions</span></li>
+                <li><span class="detail-key">وزن المنتج</span><span class="detail-value">@Model.Weight</span></li>
+                <li><span class="detail-key">بلد الصنع</span><span class="detail-value">@Model.CountryOfOrigin</span></li>
+                <li><span class="detail-key">الضمان</span><span class="detail-value">@Model.Warranty</span></li>
+            </ul>
+        </div>
+    </section>
+</div>

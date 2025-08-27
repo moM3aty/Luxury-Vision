@@ -1,0 +1,75 @@
+﻿@model LuxuryVision.ViewModels.CartViewModel
+@{
+    ViewData["Title"] = "سلة المشتريات";
+}
+
+<section class="section-padding">
+    <div class="container">
+        <div class="page-header">
+            <h1>سلة المشتريات</h1>
+        </div>
+
+        @if (Model.CartItems.Any())
+        {
+            <div class="cart-layout">
+                <div class="cart-items">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2">المنتج</th>
+                                <th>السعر</th>
+                                <th>الكمية</th>
+                                <th>الإجمالي</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.CartItems)
+                            {
+                                <tr>
+                                    <td class="product-image-cell">
+                                        <img src="@(item.ImageUrl ?? "/images/placeholder.png")" alt="@item.ProductName">
+                                    </td>
+                                    <td class="product-name-cell" data-label="المنتج">
+                                        <a asp-controller="Home" asp-action="ProductDetails" asp-route-id="@item.ProductId">@item.ProductName</a>
+                                    </td>
+                                    <td data-label="السعر">@item.Price.ToString("N2") ريال</td>
+                                    <td data-label="الكمية">@item.Quantity</td>
+                                    <td data-label="الإجمالي">@item.Total.ToString("N2") ريال</td>
+                                    <td>
+                                        <a asp-controller="Cart" asp-action="Remove" asp-route-productId="@item.ProductId" class="remove-item-icon" title="إزالة المنتج">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="order-summary">
+                    <h4>ملخص الطلب</h4>
+                    <div class="summary-row">
+                        <span>المجموع الفرعي</span>
+                        <span>@Model.GrandTotal.ToString("N2") ريال</span>
+                    </div>
+                    <div class="summary-row shipping-note">
+                        <small>سيتم احتساب رسوم الشحن في الخطوة التالية.</small>
+                    </div>
+                    <div class="summary-row total-row">
+                        <span>الإجمالي</span>
+                        <span>@Model.GrandTotal.ToString("N2") ريال</span>
+                    </div>
+                    <a asp-controller="Checkout" asp-action="Index" class="btn btn-primary full-width">الانتقال لإتمام الدفع</a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="text-center">
+                <p>سلة المشتريات فارغة.</p>
+                <a asp-controller="Home" asp-action="Shop" class="btn btn-primary">اذهب للتسوق</a>
+            </div>
+        }
+    </div>
+</section>

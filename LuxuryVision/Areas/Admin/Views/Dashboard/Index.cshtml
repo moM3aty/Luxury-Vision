@@ -1,0 +1,117 @@
+﻿@using LuxuryVision.ViewModels
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "لوحة التحكم";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="dashboard-grid">
+    <div class="stat-card">
+        <div class="stat-card-icon" style="background-color: #ebf8ff; color: #3182ce;"><i class="fas fa-receipt"></i></div>
+        <div class="stat-card-info"><span class="stat-card-title">إجمالي الطلبات</span><span class="stat-card-value">@Model.OrderCount</span></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-card-icon" style="background-color: #f0fff4; color: #38a169;"><i class="fas fa-box-open"></i></div>
+        <div class="stat-card-info"><span class="stat-card-title">عدد المنتجات</span><span class="stat-card-value">@Model.ProductCount</span></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-card-icon" style="background-color: #fffaf0; color: #dd6b20;"><i class="fas fa-tags"></i></div>
+        <div class="stat-card-info"><span class="stat-card-title">عدد الأقسام</span><span class="stat-card-value">@Model.CategoryCount</span></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-card-icon" style="background-color: #fff5f5; color: #e53e3e;"><i class="fas fa-shipping-fast"></i></div>
+        <div class="stat-card-info"><span class="stat-card-title">مناطق الشحن</span><span class="stat-card-value">@Model.ShippingZoneCount</span></div>
+    </div>
+</div>
+
+<div class="dashboard-main-grid">
+    <div class="card chart-container-main">
+        <div class="card-header">
+            <h3>المبيعات خلال العام الحالي</h3>
+        </div>
+        <div class="card-body">
+            <canvas id="salesChart"></canvas>
+        </div>
+    </div>
+    <div class="dashboard-sidebar">
+        <div class="card chart-container-side">
+            <div class="card-header">
+                <h3>توزيع المنتجات</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h3>أحدث الطلبات</h3>
+            </div>
+            <div class="card-body recent-orders-list">
+                @foreach (var order in Model.RecentOrders)
+                {
+                    <div class="order-item">
+                        <div class="order-info">
+                            <span class="order-id">#@order.Id - @order.FirstName @order.LastName</span>
+                            <span class="order-date">@order.OrderDate.ToString("dd MMM")</span>
+                        </div>
+                        <div class="order-status">
+                            <span class="badge">@order.OrderStatus</span>
+                            <span class="order-total">@order.TotalAmount.ToString("N0") ريال</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Sales Line Chart
+            fetch('/Admin/Dashboard/GetSalesData')
+                .then(response => response.json())
+                .then(result => {
+                    const ctx = document.getElementById('salesChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: result.labels,
+                            datasets: [{
+                                label: 'إجمالي المبيعات (ريال)',
+                                data: result.data,
+                                backgroundColor: 'rgba(197, 164, 126, 0.2)',
+                                borderColor: '#c5a47e',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                });
+
+            // Category Doughnut Chart
+            fetch('/Admin/Dashboard/GetCategoryDistributionData')
+                .then(response => response.json())
+                .then(result => {
+                    const ctx = document.getElementById('categoryChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: result.labels,
+                            datasets: [{
+                                label: 'عدد المنتجات',
+                                data: result.data,
+                                backgroundColor: ['#c5a47e', '#3a3a3a', '#7a7a7a', '#e9e2d9', '#b3916c'],
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+                    });
+                });
+        });
+    </script>
+}

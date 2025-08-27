@@ -1,0 +1,78 @@
+﻿@model IEnumerable<LuxuryVision.Models.ShippingZone>
+@{
+    ViewData["Title"] = "إدارة مناطق الشحن";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3>مناطق الشحن (@Model.Count())</h3>
+        <a asp-action="ShippingZoneForm" class="btn btn-primary">
+            <i class="fas fa-plus"></i> إضافة منطقة جديدة
+        </a>
+    </div>
+    <div class="card-body">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>اسم المنطقة</th>
+                    <th>سعر الشحن</th>
+                    <th>إجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td data-label="اسم المنطقة">@item.ZoneName</td>
+                        <td data-label="سعر الشحن">@item.ShippingCost.ToString("N2") ريال</td>
+                        <td data-label="إجراءات">
+                            <a asp-action="ShippingZoneForm" asp-route-id="@item.Id" class="btn-action btn-edit"><i class="fas fa-pencil-alt"></i></a>
+                            <button type="button" class="btn-action btn-delete" onclick="confirmDelete(@item.Id, '@item.ZoneName')">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>تأكيد الحذف</h4>
+            <button type="button" class="close-button" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>هل أنت متأكد من أنك تريد حذف منطقة الشحن "<strong id="zoneName"></strong>"؟</p>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeModal()">إلغاء</button>
+            <form asp-action="DeleteShippingZone" method="post" id="deleteForm" style="display: contents;">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="zoneIdToDelete" name="id" value="" />
+                <button type="submit" class="btn btn-danger">نعم، قم بالحذف</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var modal = document.getElementById('deleteModal');
+        function confirmDelete(id, name) {
+            document.getElementById('zoneName').innerText = name;
+            document.getElementById('zoneIdToDelete').value = id;
+            modal.style.display = "block";
+        }
+        function closeModal() {
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+}
