@@ -72,10 +72,9 @@ namespace LuxuryVision.Areas.Identity.Pages.Account
                     _logger.LogInformation("User logged in.");
                     var user = await _userManager.FindByEmailAsync(Input.Email);
 
-                    // A more robust solution would use roles, but for now this works for the single admin.
-                    if (user != null && user.Email.Equals("admin@luxuryvision.com", StringComparison.OrdinalIgnoreCase))
+                    if (user != null && await _userManager.IsInRoleAsync(user, "Admin"))
                     {
-                        return LocalRedirect("~/Admin"); // Redirect to the Admin area root
+                        return LocalRedirect("~/Admin"); 
                     }
 
                     return LocalRedirect(returnUrl);

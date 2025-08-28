@@ -56,7 +56,10 @@
                     {
                         <a asp-controller="Home" asp-action="ProductDetails" asp-route-id="@product.Id" class="product-card">
                             <div class="product-image">
-                                <img src="@(product.ImageUrl ?? "/images/placeholder.png")" alt="@product.Name">
+                                <img src="@(product.ImageUrl ?? $"https://placehold.co/600x600/f5f0e9/3a3a3a?text={System.Net.WebUtility.UrlEncode(product.Name)}")" alt="@product.Name">
+                                <div class="product-overlay">
+                                    <i class="fas fa-eye"></i>
+                                </div>
                             </div>
                             <div class="product-info">
                                 <h3 class="product-name">@product.Name</h3>

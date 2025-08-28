@@ -10,7 +10,6 @@
         </div>
         <form asp-action="PlaceOrder" method="post" id="checkoutForm">
             @Html.AntiForgeryToken()
-            @* FIXED: Changed validation summary to "All" to show all error messages *@
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="checkout-layout">

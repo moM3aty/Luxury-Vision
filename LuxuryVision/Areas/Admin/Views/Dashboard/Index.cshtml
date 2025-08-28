@@ -70,7 +70,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Sales Line Chart
             fetch('/Admin/Dashboard/GetSalesData')
                 .then(response => response.json())
                 .then(result => {
@@ -93,7 +92,6 @@
                     });
                 });
 
-            // Category Doughnut Chart
             fetch('/Admin/Dashboard/GetCategoryDistributionData')
                 .then(response => response.json())
                 .then(result => {

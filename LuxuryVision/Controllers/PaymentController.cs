@@ -54,9 +54,8 @@ namespace LuxuryVision.Controllers
                     return View("Index", order);
                 }
             }
-            else // Handle other simulated payment methods (like QR, Saree, etc.)
+            else 
             {
-                // UPDATED: Change status to "Awaiting Payment" for simulated methods
                 order.OrderStatus = "بانتظار الدفع";
                 _context.Orders.Add(order);
                 await _context.SaveChangesAsync();
@@ -68,7 +67,6 @@ namespace LuxuryVision.Controllers
             }
         }
 
-        // Moyasar redirects back to this URL after payment attempt.
         public async Task<IActionResult> PaymentCallback(string id, string status, string message)
         {
             var order = HttpContext.Session.Get<Order>("PendingOrder");

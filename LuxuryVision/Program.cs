@@ -1,8 +1,9 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using LuxuryVision.Data;
+﻿using LuxuryVision.Data;
 using LuxuryVision.Models;
 using LuxuryVision.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services; // Add this using
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,12 +11,32 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 6;
+})
+    .AddRoles<IdentityRole>()
+    .AddErrorDescriber<CustomIdentityErrorDescriber>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders(); 
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+});
+
+// Register the dummy email sender
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
+
 builder.Services.AddScoped<IMoyasarService, MoyasarService>();
 
 builder.Services.AddDistributedMemoryCache();
@@ -41,7 +62,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 
-// This route is crucial for the admin login to work
 app.MapControllerRoute(
     name: "AdminArea",
     pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");

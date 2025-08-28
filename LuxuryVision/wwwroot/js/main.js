@@ -1,6 +1,4 @@
-﻿
-// Mobile Menu Toggle
-const menuIcon = document.querySelector('.menu-icon');
+﻿const menuIcon = document.querySelector('.menu-icon');
 const navLinks = document.querySelector('.nav-links');
 
 if (menuIcon && navLinks) {
@@ -9,7 +7,6 @@ if (menuIcon && navLinks) {
     });
 }
 
-// Scroll Animation (Intersection Observer)
 const scrollElements = document.querySelectorAll('.animate-on-scroll');
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {

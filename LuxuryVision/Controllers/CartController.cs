@@ -26,13 +26,11 @@ namespace LuxuryVision.Controllers
             var viewModel = new CartViewModel
             {
                 CartItems = cart
-                // The line for GrandTotal has been removed because it's now calculated automatically.
             };
 
             return View(viewModel);
         }
 
-        // ... (Other actions remain the same) ...
         [HttpPost]
         public async Task<IActionResult> Add(int productId, int quantity = 1)
         {

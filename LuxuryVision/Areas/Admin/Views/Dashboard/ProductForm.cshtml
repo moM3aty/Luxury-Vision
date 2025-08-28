@@ -1,5 +1,4 @@
-﻿@* FILE: /Areas/Admin/Views/Dashboard/ProductForm.cshtml *@
-@model LuxuryVision.ViewModels.ProductFormViewModel
+﻿@model LuxuryVision.ViewModels.ProductFormViewModel
 @{
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
@@ -14,7 +13,6 @@
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="form-grid">
-                <!-- Main Details Column -->
                 <div class="form-column">
                     <div class="form-group">
                         <label asp-for="Product.Name">اسم المنتج</label>
@@ -52,7 +50,6 @@
                     </div>
                 </div>
 
-                <!-- Technical Details Column -->
                 <div class="form-column">
                     <div class="form-row">
                         <div class="form-group">

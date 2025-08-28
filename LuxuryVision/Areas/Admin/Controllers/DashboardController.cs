@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace LuxuryVision.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class DashboardController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -26,7 +26,6 @@ namespace LuxuryVision.Areas.Admin.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        // GET: /Admin/Dashboard/Index
         public async Task<IActionResult> Index()
         {
             var viewModel = new DashboardViewModel
@@ -117,7 +116,6 @@ namespace LuxuryVision.Areas.Admin.Controllers
                     await viewModel.ImageFile.CopyToAsync(fileStream);
                 }
 
-                // Delete old image if it exists
                 if (!string.IsNullOrEmpty(viewModel.Product.ImageUrl))
                 {
                     var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, viewModel.Product.ImageUrl.TrimStart('/'));
@@ -130,11 +128,11 @@ namespace LuxuryVision.Areas.Admin.Controllers
                 viewModel.Product.ImageUrl = "/images/products/" + uniqueFileName;
             }
 
-            if (viewModel.Product.Id == 0) // New Product
+            if (viewModel.Product.Id == 0) 
             {
                 _context.Products.Add(viewModel.Product);
             }
-            else // Existing Product
+            else 
             {
                 _context.Products.Update(viewModel.Product);
             }
@@ -204,7 +202,7 @@ namespace LuxuryVision.Areas.Admin.Controllers
                 }
             }
 
-            if (viewModel.Category.Id == 0) // New Category
+            if (viewModel.Category.Id == 0) 
             {
                 if (uniqueFileName != null)
                 {
@@ -212,7 +210,7 @@ namespace LuxuryVision.Areas.Admin.Controllers
                 }
                 _context.Categories.Add(viewModel.Category);
             }
-            else // Existing Category
+            else 
             {
                 var categoryInDb = await _context.Categories.FindAsync(viewModel.Category.Id);
                 if (categoryInDb == null) return NotFound();

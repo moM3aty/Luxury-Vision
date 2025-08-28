@@ -1,5 +1,8 @@
 ﻿using LuxuryVision.Models;
 using Microsoft.AspNetCore.Identity;
+using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LuxuryVision.Data
 {
@@ -8,10 +11,16 @@ namespace LuxuryVision.Data
         public static async Task SeedAdminUserAsync(IServiceProvider serviceProvider)
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>(); 
 
-            
+            string adminRole = "Admin";
             string adminEmail = "admin@luxuryvision.com";
-            string adminPassword = "Password123!"; 
+            string adminPassword = "Password123!";
+
+            if (!await roleManager.RoleExistsAsync(adminRole))
+            {
+                await roleManager.CreateAsync(new IdentityRole(adminRole));
+            }
 
             if (await userManager.FindByEmailAsync(adminEmail) == null)
             {
@@ -19,21 +28,14 @@ namespace LuxuryVision.Data
                 {
                     UserName = adminEmail,
                     Email = adminEmail,
-                    EmailConfirmed = true 
+                    EmailConfirmed = true
                 };
 
                 IdentityResult result = await userManager.CreateAsync(adminUser, adminPassword);
 
                 if (result.Succeeded)
                 {
-                    Console.WriteLine("Admin user created successfully.");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        Console.WriteLine(error.Description);
-                    }
+                    await userManager.AddToRoleAsync(adminUser, adminRole);
                 }
             }
         }

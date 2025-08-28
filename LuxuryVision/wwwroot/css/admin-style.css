@@ -2,12 +2,11 @@
 @import url('[https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap](https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap)');
 
 :root {
-    /* Main website color palette adapted for admin dashboard */
-    --primary-accent: #c5a47e; /* Main brand color */
+    --primary-accent: #c5a47e; 
     --primary-accent-dark: #b3916c;
     --primary-accent-light: #f9f5f0;
-    --sidebar-bg: #3a3a3a; /* Secondary color for dark areas */
-    --admin-bg: #f5f0e9; /* Main background color */
+    --sidebar-bg: #3a3a3a;
+    --admin-bg: #f5f0e9; 
     --card-bg: #ffffff;
     --text-primary: #3a3a3a;
     --text-secondary: #7a7a7a;
@@ -34,7 +33,6 @@ body {
     display: flex;
 }
 
-/* === Sidebar === */
 .sidebar {
     width: 250px;
     background-color: var(--sidebar-bg);
@@ -103,7 +101,6 @@ body {
     margin: 16px 24px;
 }
 
-/* === Main Content === */
 .main-content {
     margin-right: 250px;
     width: calc(100% - 250px);
@@ -129,7 +126,6 @@ body {
         font-weight: 900;
     }
 
-/* === Dashboard Grid & Stat Cards === */
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -183,7 +179,6 @@ body {
     line-height: 1.2;
 }
 
-/* Specific Stat Card Colors (Matched to new theme) */
 .stat-card:nth-child(1) .stat-card-icon {
     background-color: var(--primary-accent-light);
     color: var(--primary-accent);
@@ -204,7 +199,6 @@ body {
     color: #e53e3e;
 }
 
-/* === Chart Container === */
 .chart-container {
     background: var(--card-bg);
     padding: 24px;
@@ -218,7 +212,6 @@ body {
         font-weight: 700;
     }
 
-/* === General Card & Table Styles === */
 .card {
     background: var(--card-bg);
     border-radius: 12px;
@@ -286,7 +279,6 @@ body {
     border-radius: 6px;
 }
 
-/* === Buttons & Actions === */
 .btn {
     padding: 10px 20px;
     border-radius: 8px;
@@ -361,7 +353,6 @@ body {
     background-color: var(--border-color);
 }
 
-/* === Forms === */
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -501,7 +492,6 @@ label {
 }
 
 
-/* === Responsive === */
 @media (max-width: 992px) {
     .sidebar {
         width: 70px;
@@ -554,7 +544,7 @@ li{
 
     .chart-container-main .card-body, .chart-container-side .card-body {
         padding: 16px;
-        height: calc(100% - 65px); /* Adjust based on card-header height */
+        height: calc(100% - 65px); 
     }
 
 .dashboard-sidebar {

@@ -32,7 +32,7 @@ namespace LuxuryVision.Services
 
             var paymentData = new
             {
-                amount = (int)(order.TotalAmount * 100), // Amount in halalas
+                amount = (int)(order.TotalAmount * 100), 
                 currency = "SAR",
                 description = $"Order #{order.Id} for Luxury Vision",
                 callback_url = callbackUrl,
@@ -52,7 +52,6 @@ namespace LuxuryVision.Services
                 var responseBody = await response.Content.ReadAsStringAsync();
                 using (var jsonDoc = JsonDocument.Parse(responseBody))
                 {
-                    // The transaction_url is inside the 'source' object for credit card payments
                     var source = jsonDoc.RootElement.GetProperty("source");
                     var transactionUrl = source.GetProperty("transaction_url").GetString();
                     return transactionUrl;
@@ -60,9 +59,7 @@ namespace LuxuryVision.Services
             }
             else
             {
-                // Handle API error
                 var errorBody = await response.Content.ReadAsStringAsync();
-                // You might want to log this errorBody for debugging
                 return null;
             }
         }
