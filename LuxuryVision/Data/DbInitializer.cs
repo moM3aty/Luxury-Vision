@@ -15,7 +15,7 @@ namespace LuxuryVision.Data
 
             string adminRole = "Admin";
             string adminEmail = "admin@luxuryvision.com";
-            string adminPassword = "Password123!";
+            string adminPassword = "Your Password";
 
             if (!await roleManager.RoleExistsAsync(adminRole))
             {
