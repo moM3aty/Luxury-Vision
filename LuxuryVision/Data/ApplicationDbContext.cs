@@ -16,5 +16,7 @@ namespace LuxuryVision.Data
         public DbSet<ShippingZone> ShippingZones { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<BlogPost> BlogPosts { get; set; }
+
     }
 }

@@ -1,0 +1,399 @@
+﻿@model LuxuryVision.Models.BlogPost
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<style>
+    :root {
+        --lux-gold: #c5a47e;
+        --lux-gold-dark: #b08d55;
+        --lux-black: #111;
+        --lux-grey: #f9f9f9;
+        --lux-text: #333;
+    }
+
+    body {
+        background-color: #fff !important;
+        overflow-x: hidden;
+    }
+
+    /* Hero Section */
+    .details-hero {
+        position: relative;
+        height: 60vh;
+        min-height: 450px;
+        background-color: #1a1a1a;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .hero-bg-blur {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('@(Model.ImageUrl ?? "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80")');
+        background-size: cover;
+        background-position: center;
+        filter: blur(15px) brightness(0.5);
+        transform: scale(1.1);
+        z-index: 1;
+    }
+
+    .hero-image-container {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: 90%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .hero-image-container img {
+            max-width: 90%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            animation: fadeInScale 0.8s ease-out;
+        }
+
+    /* Content Layout */
+    .article-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 50px 20px;
+        position: relative;
+    }
+
+    /* Header Info (Title & Meta) */
+    .article-header-info {
+        text-align: center;
+        margin-bottom: 3rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 2rem;
+    }
+
+    .post-title {
+        font-size: 2.5rem;
+        font-weight: 900;
+        line-height: 1.4;
+        margin-bottom: 1.5rem;
+        color: var(--lux-black);
+    }
+
+    .post-meta {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        font-size: 0.95rem;
+        color: #777;
+    }
+
+        .post-meta i {
+            color: var(--lux-gold);
+            margin-left: 5px;
+        }
+
+    /* =========================================
+           FIXED RICH TEXT CONTENT STYLES
+           ========================================= */
+    .article-content {
+        font-size: 1.25rem;
+        line-height: 1.9;
+        color: var(--lux-text);
+        font-family: 'Cairo', sans-serif;
+        text-align: right; /* تعديل المحاذاة لليمين لقراءة أفضل */
+    }
+
+        /* الفقرات */
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        /* إصلاح القوائم (Lists Fix) */
+        .article-content ul, .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-right: 2rem; /* مسافة طبيعية للنقاط */
+        }
+
+        .article-content ul {
+            list-style-type: disc;
+        }
+
+        .article-content ol {
+            list-style-type: decimal;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* العناوين (Headings) */
+        .article-content h1, .article-content h2, .article-content h3,
+        .article-content h4, .article-content h5, .article-content h6 {
+            color: var(--lux-black);
+            font-weight: 800;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            clear: both;
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            border-right: 5px solid var(--lux-gold);
+            padding-right: 15px;
+        }
+
+        .article-content h3 {
+            font-size: 1.5rem;
+            color: var(--lux-gold-dark);
+        }
+
+        /* الروابط (Links) */
+        .article-content a {
+            color: var(--lux-gold);
+            text-decoration: underline;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+            .article-content a:hover {
+                color: var(--lux-black);
+            }
+
+        /* الصور (Images) - ضمان عدم خروجها عن النص */
+        .article-content img {
+            max-width: 100% !important;
+            height: auto !important;
+            display: block;
+            margin: 2rem auto;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        /* الجداول (Tables) */
+        .article-content table {
+            width: 100% !important;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 1rem;
+            overflow-x: auto;
+            display: block; /* لضمان التمرير في الشاشات الصغيرة */
+        }
+
+            .article-content table th, .article-content table td {
+                padding: 12px 15px;
+                border: 1px solid #ddd;
+            }
+
+            .article-content table th {
+                background-color: var(--lux-black);
+                color: white;
+                text-align: right;
+            }
+
+            .article-content table tr:nth-child(even) {
+                background-color: #f8f8f8;
+            }
+
+        /* الاقتباسات (Blockquotes) */
+        .article-content blockquote {
+            background: #f9f9f9;
+            border-right: 5px solid var(--lux-gold);
+            margin: 2rem 0;
+            padding: 20px 30px;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #555;
+        }
+
+        /* الفيديوهات (Iframes/Youtube) */
+        .article-content iframe, .article-content video {
+            max-width: 100%;
+            margin: 2rem auto;
+            display: block;
+        }
+
+        /* فاصل */
+        .article-content hr {
+            border: 0;
+            border-top: 1px solid #eee;
+            margin: 3rem 0;
+        }
+
+    /* --- End Content Styles --- */
+
+    /* Author Box */
+    .author-box {
+        background: #fff;
+        border: 1px solid #eee;
+        padding: 30px;
+        margin-top: 60px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+    }
+
+    .author-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: var(--lux-gold);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .author-details h4 {
+        margin: 0 0 5px;
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--lux-black);
+    }
+
+    /* Share & Navigation */
+    .post-footer {
+        margin-top: 50px;
+        padding-top: 30px;
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .social-links a {
+        display: inline-flex;
+        width: 40px;
+        height: 40px;
+        background: #f4f4f4;
+        color: #333;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        margin-left: 10px;
+        transition: all 0.3s;
+    }
+
+        .social-links a:hover {
+            background: var(--lux-gold);
+            color: white;
+        }
+
+    @@keyframes fadeInScale {
+        from
+
+    {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    }
+
+    @@media (max-width: 768px) {
+        .details-hero
+
+    {
+        height: 40vh;
+        min-height: 300px;
+    }
+
+    .hero-image-container img {
+        max-width: 100%;
+    }
+
+    .post-title {
+        font-size: 1.8rem;
+    }
+
+    .author-box {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .post-footer {
+        justify-content: center;
+    }
+
+    .article-content {
+        font-size: 1.1rem;
+    }
+
+    }
+</style>
+
+<div class="details-hero">
+    <!-- الخلفية الضبابية -->
+    <div class="hero-bg-blur"></div>
+
+    <!-- الصورة الكاملة (بدون قص) -->
+    <div class="hero-image-container">
+        <img src="@(Model.ImageUrl ?? "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80")" alt="@Model.Title">
+    </div>
+</div>
+
+<div class="article-container">
+    <!-- العنوان والمعلومات -->
+    <div class="article-header-info">
+        <span style="color: var(--lux-gold); font-weight: bold; letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem;">مدونة الرفاهية</span>
+        <h1 class="post-title">@Model.Title</h1>
+        <div class="post-meta">
+            <span><i class="far fa-user"></i> @(Model.Author ?? "فريق التحرير")</span>
+            <span><i class="far fa-calendar-alt"></i> @Model.CreatedAt.ToString("dd MMMM yyyy")</span>
+        </div>
+    </div>
+
+    <!-- محتوى المقال (Rich Text) -->
+    <article class="article-content">
+        @Html.Raw(Model.Content)
+    </article>
+
+    <!-- صندوق الكاتب -->
+    <div class="author-box">
+        <div class="author-img">
+            <i class="fas fa-pen-nib"></i>
+        </div>
+        <div class="author-details">
+            <h4>@(Model.Author ?? "Luxury Vision")</h4>
+            <span style="color: #888; font-size: 0.9rem;">كاتب مختص</span>
+            <p style="margin: 5px 0 0; color: #555; line-height: 1.5; font-size: 0.95rem;">
+                نشارككم شغفنا بالأثاث الفاخر والتصميم الداخلي. تابعونا للحصول على أحدث الاتجاهات والنصائح لتحويل منزلكم إلى تحفة فنية.
+            </p>
+        </div>
+    </div>
+
+    <!-- الفوتر (مشاركة + عودة) -->
+    <div class="post-footer">
+        <div class="back-link">
+            <a asp-action="Index" class="btn btn-outline-dark" style="border-radius: 20px; padding: 8px 25px;">
+                <i class="fas fa-arrow-right" style="margin-left: 5px;"></i> العودة للمجلة
+            </a>
+        </div>
+        <div class="social-links">
+            <span style="font-weight: bold; margin-left: 10px;">مشاركة:</span>
+            <a href="https://twitter.com/intent/tweet?text=@Model.Title" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=@Context.Request.Scheme://@Context.Request.Host@Context.Request.Path" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://wa.me/?text=@Model.Title @Context.Request.Scheme://@Context.Request.Host@Context.Request.Path" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        </div>
+    </div>
+</div>

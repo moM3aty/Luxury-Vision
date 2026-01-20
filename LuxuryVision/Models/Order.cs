@@ -33,21 +33,21 @@ namespace LuxuryVision.Models
         public string Email { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal Subtotal { get; set; } 
+        public decimal Subtotal { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal ShippingCost { get; set; } 
+        public decimal ShippingCost { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal TotalAmount { get; set; } 
+        public decimal TotalAmount { get; set; }
 
         public DateTime OrderDate { get; set; }
         public string OrderStatus { get; set; }
-        public string PaymentMethod { get; set; } 
+        public string PaymentMethod { get; set; }
 
         [Required(ErrorMessage = "الرجاء اختيار منطقة الشحن")]
         [Display(Name = "منطقة الشحن")]
-        public int ShippingZoneId { get; set; } 
+        public int ShippingZoneId { get; set; }
         public virtual ShippingZone ShippingZone { get; set; }
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }

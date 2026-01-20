@@ -1,0 +1,77 @@
+﻿@model IEnumerable<LuxuryVision.Models.BlogPost>
+@{
+    ViewData["Title"] = "إدارة المدونة";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3>المقالات المنشورة (@Model.Count())</h3>
+        <a asp-action="BlogForm" class="btn btn-primary">
+            <i class="fas fa-plus"></i> إضافة مقال جديد
+        </a>
+    </div>
+    <div class="card-body">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>الصورة</th>
+                    <th>العنوان</th>
+                    <th>تاريخ النشر</th>
+                    <th>الكاتب</th>
+                    <th>إجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><img src="@(item.ImageUrl ?? "/images/placeholder.png")" alt="@item.Title" class="table-img" /></td>
+                        <td data-label="العنوان">@item.Title</td>
+                        <td data-label="التاريخ">@item.CreatedAt.ToString("yyyy/MM/dd")</td>
+                        <td data-label="الكاتب">@item.Author</td>
+                        <td data-label="إجراءات">
+                            <a asp-action="BlogForm" asp-route-id="@item.Id" class="btn-action btn-edit" title="تعديل"><i class="fas fa-pencil-alt"></i></a>
+                            
+                            <form id="deleteForm_@item.Id" asp-action="DeletePost" asp-route-id="@item.Id" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="button" class="btn-action btn-delete" onclick="confirmDelete(@item.Id)" title="حذف">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "لن تتمكن من استرجاع هذا المقال بعد حذفه!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e53e3e', 
+                cancelButtonColor: '#3a3a3a',  
+                confirmButtonText: 'نعم، احذف!',
+                cancelButtonText: 'إلغاء',
+                background: '#fff',
+                color: '#333',
+                iconColor: '#c5a47e', 
+                customClass: {
+                    popup: 'animated fadeInDown' 
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm_' + id).submit();
+                }
+            })
+        }
+    </script>
+}

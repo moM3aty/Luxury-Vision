@@ -1,0 +1,205 @@
+﻿@model IEnumerable<LuxuryVision.Models.BlogPost>
+@{
+    ViewData["Title"] = "مجلة الفخامة - Luxury Vision Journal";
+}
+
+<!-- Premium Styles Scoped to Blog Only -->
+<style>
+    :root {
+        --lux-gold: #c5a47e;
+        --lux-black: #1a1a1a;
+        --lux-grey: #f9f9f9;
+        --lux-text: #555;
+    }
+
+    body {
+        background-color: #fff !important; /* Override default background */
+    }
+
+    .blog-header-hero {
+        position: relative;
+        height: 60vh;
+        min-height: 400px;
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=2000&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed; /* Parallax Effect */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white !important;
+        margin-bottom: 4rem;
+    }
+
+    .hero-content h1 {
+        font-size: 4rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+        font-family: 'Cairo', sans-serif;
+        color:#fff;
+    }
+
+    .hero-content p {
+        font-size: 1.2rem;
+        font-weight: 300;
+        letter-spacing: 1px;
+        opacity: 0.9;
+    }
+
+    .separator-gold {
+        width: 80px;
+        height: 3px;
+        background-color: var(--lux-gold);
+        margin: 20px auto;
+    }
+
+    .premium-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 3rem;
+        padding-bottom: 5rem;
+    }
+
+    .article-card {
+        background: #fff;
+        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border: none;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .article-card:hover {
+            transform: translateY(-10px);
+        }
+
+    .article-thumb {
+        position: relative;
+        overflow: hidden;
+        height: 300px;
+        margin-bottom: 1.5rem;
+    }
+
+        .article-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+    .article-card:hover .article-thumb img {
+        transform: scale(1.1);
+    }
+
+    .article-meta {
+        font-size: 0.85rem;
+        color: var(--lux-gold);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.5rem;
+        display: flex;
+        gap: 15px;
+    }
+
+    .article-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--lux-black);
+        line-height: 1.4;
+        margin-bottom: 1rem;
+        transition: color 0.3s;
+    }
+
+    .article-card:hover .article-title {
+        color: var(--lux-gold);
+    }
+
+    .article-excerpt {
+        color: var(--lux-text);
+        line-height: 1.8;
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .read-more-link {
+        display: inline-block;
+        padding-bottom: 5px;
+        border-bottom: 2px solid var(--lux-black);
+        color: var(--lux-black);
+        font-weight: 700;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+        width: fit-content;
+    }
+
+        .read-more-link:hover {
+            border-color: var(--lux-gold);
+            color: var(--lux-gold);
+        }
+
+    @@media (max-width: 768px) {
+        .hero-content h1
+
+    {
+        font-size: 2.5rem;
+    }
+
+    .premium-grid {
+        grid-template-columns: 1fr;
+    }
+
+    }
+</style>
+
+<div class="blog-header-hero">
+    <div class="hero-content">
+        <h1>مجلة الفخامة</h1>
+        <div class="separator-gold"></div>
+        <p>رحلة في عالم الأناقة، التصميم، وفن العيش</p>
+    </div>
+</div>
+
+<div class="container">
+    @if (!Model.Any())
+    {
+        <div class="text-center" style="padding: 100px 0;">
+            <i class="fas fa-pen-nib" style="font-size: 3rem; color: #ddd; margin-bottom: 20px;"></i>
+            <h3 style="color: #555;">نحن بصدد كتابة قصص ملهمة لكم..</h3>
+            <p>ترقبوا مقالاتنا قريباً.</p>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-dark mt-4">العودة للرئيسية</a>
+        </div>
+    }
+    else
+    {
+        <div class="premium-grid">
+            @foreach (var post in Model)
+            {
+                <article class="article-card">
+                    <a asp-action="Details" asp-route-id="@post.Id" class="article-thumb">
+                        <img src="@(post.ImageUrl ?? "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80")" alt="@post.Title">
+                    </a>
+                    <div class="article-meta">
+                        <span><i class="far fa-clock"></i> @post.CreatedAt.ToString("MMM dd, yyyy")</span>
+                        <span><i class="far fa-user"></i> @(post.Author ?? "Luxury Vision")</span>
+                    </div>
+                    <a asp-action="Details" asp-route-id="@post.Id">
+                        <h2 class="article-title">@post.Title</h2>
+                    </a>
+                    <p class="article-excerpt">
+                        @post.Summary
+                    </p>
+                    <a asp-action="Details" asp-route-id="@post.Id" class="read-more-link">
+                        قراءة المقال <i class="fas fa-arrow-left" style="font-size: 0.8em;"></i>
+                    </a>
+                </article>
+            }
+        </div>
+    }
+</div>
