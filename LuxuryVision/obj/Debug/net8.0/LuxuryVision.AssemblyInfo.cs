@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LuxuryVision")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+442bb181d4fb4353473528f974af011eaec27470")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+026c96150d0c910ce3ca4587abe9afa0d7f1c17c")]
 [assembly: System.Reflection.AssemblyProductAttribute("LuxuryVision")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LuxuryVision")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
